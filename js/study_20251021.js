@@ -1,3 +1,33 @@
+/*
+
+map() - 데이터 변환용
+: 배열을 다른 형태로 바꾸고 싶을 때 사용
+
+map 특징 - 원본 배열은 그대로 유지됨
+        - 새로운 배열을 "같은 길이"로 반환
+        - UI 표시용 데이터 전처리에 자주 사용
+        - 예 : 숫자를 , 포함 문자열, 단위 추가, label 변환 등
+
+
+filter() - 조건 검색용
+: 특정 조건에 맞는 데이터만 남기고 싶을 때
+
+filter 특징 - 조건식이 true인 요소만 남김
+           - 새로운 배열로 반환
+           - 검색 / 필터 기능 / 조건별 리스트 출력 등에 사용
+
+           
+reduce() - 누적 계산용
+: 배열을 하나의 값(합계, 평균, 객체 등)으로 줄이고 싶을 때
+
+arr.reduce((누적값, 현재값) => { return 새로운누적값 }, 초기값)
+
+reduce 특징  - 누적값(sum)이 계속 전달됨
+            - 초기값을 꼭 지정해야 예외 없이 작동
+            - 합계, 평균, 그룹화, 객체 누적 등에 활용
+
+*/
+
 const job = [
   { title: "경리(경력) 채용", salary:3500000},
   { title: "시설과장 채용", salary:4000000},
@@ -10,11 +40,11 @@ const jobLostForUI = job.map((job) => {
     };
 });
 console.log(jobLostForUI);
-[
-  { title: '경리(경력) 채용', salary: '3,500,000원' },
-  { title: '시설과장 채용', salary: '4,000,000원' },
-  { title: '관리소장 모집', salary: '4,500,000원' }
-]
+// [
+//   { title: '경리(경력) 채용', salary: '3,500,000원' },
+//   { title: '시설과장 채용', salary: '4,000,000원' },
+//   { title: '관리소장 모집', salary: '4,500,000원' }
+// ]
 
 
 // 문제
@@ -73,7 +103,8 @@ const avgSalary =
 
 const resultAvg = jobDate.filter(job => job.salary > avgSalary);
 console.log(`평균 급여: ${avgSalary.toLocaleString()}원`);
-console.log(resultAvg);
+// 평균 급여: 3,075,000원
+console.log(resultAvg);  // 평균급여 이상인 date 출력
 
 // 문제 3
 // 모든 회사 급여를 만원 단위 문자열로 반환하세요. (map 사용)
@@ -81,7 +112,6 @@ const resultSalary = jobDate.map(job => ({
   company: job.company,
   salaryText: (job.salary / 10000).toFixed(0) + "만원"
 }));
-
 console.log(resultSalary);
 
 // 문제 4
@@ -90,8 +120,8 @@ const regionCount = jobDate.reduce((acc, job) => {
   acc[job.region] = (acc[job.region] || 0) + 1;
   return acc;
 }, {});
-
 console.log(regionCount);
+// { '서울': 3, '충남': 1 }
 
 
 // 문제 5
@@ -103,3 +133,4 @@ const avgExp =
   highSalaryJobs.length;
 
 console.log(`300만 이상 회사 평균 경력: ${avgExp.toFixed(1)}년`);
+// 300만 이상 회사 평균 경력: 3.5년
