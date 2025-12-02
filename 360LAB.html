@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>360LAB Intro</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: "Poppins", sans-serif;
+    }
+
+    /* 화면 2개짜리 원페이지 구조 (스크롤 되게) */
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #intro {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .neon-box {
+      text-align: center;
+      transition: transform 0.3s ease-out;
+      will-change: transform;
+    }
+
+    .neon-text {
+      color: #4FFFE3;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin: 14px 0;
+      transition: 0.2s ease;
+      text-shadow:
+        0 0 5px #1EA7FF,
+        0 0 10px #1EA7FF,
+        0 0 20px #4FFFE3,
+        0 0 40px #4FFFE3;
+      animation: glowPulse 3s infinite alternate ease-in-out;
+      font-size: clamp(20px, 2.6vw, 32px);
+    }
+
+    .neon-text:first-child {
+      font-size: clamp(22px, 3vw, 36px);
+    }
+
+    .neon-text:last-child {
+      font-size: clamp(26px, 3.6vw, 42px);
+    }
+
+    /* Glow 부드럽게 움직이는 효과 */
+    @keyframes glowPulse {
+      0% {
+        text-shadow:
+          0 0 8px #1EA7FF,
+          0 0 15px #1EA7FF,
+          0 0 25px #4FFFE3,
+          0 0 50px #4FFFE3;
+      }
+      100% {
+        text-shadow:
+          0 0 3px #1EA7FF,
+          0 0 6px #1EA7FF,
+          0 0 10px #4FFFE3,
+          0 0 15px #4FFFE3;
+      }
+    }
+
+    /* 랜덤 Flicker 때 꺼졌다 켜지는 느낌 */
+    .flicker-off {
+      opacity: 0.25;
+      text-shadow:
+        0 0 2px #0a3a47,
+        0 0 4px #0a3a47;
+    }
+
+    /* 스크롤로 어느 지점 넘으면 → 네온 OFF + 사라짐 */
+    body.intro-off .neon-text {
+      opacity: 0;
+      text-shadow: none;
+      transition:
+        opacity 0.4s ease-out,
+        text-shadow 0.3s ease-out;
+    }
+
+    /* 다음 섹션 (예시용) */
+    #next {
+      background: radial-gradient(circle at top, #1EA7FF22, #000 60%);
+      color: #EAEFF5;
+      flex-direction: column;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    #next h2 {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    #next p {
+      max-width: 480px;
+      line-height: 1.6;
+      opacity: 0.8;
+      font-size: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Intro / Neon Text -->
+  <section id="intro">
+    <div class="neon-box">
+      <h1 class="neon-text" data-flicker>Where UX meets Front-End</h1>
+      <h2 class="neon-text" data-flicker>Welcome to 360LAB</h2>
+    </div>
+  </section>
+
+  <!-- 다음 컨텐츠 (예시) -->
+  <section id="next">
+    <div>
+      <h2>Character Select Zone</h2>
+      <p>
+        아래에는 캐릭터 카드들이 들어오고,<br />
+        클릭하면 디테일 페이지가 오버레이로 열릴 예정 👾<br />
+        지금은 네온 인트로만 테스트하는 샘플 섹션이야.
+      </p>
+    </div>
+  </section>
+
+  <script>
+    // 네온 Flicker (랜덤 깜빡임)
+    const flickerTargets = document.querySelectorAll("[data-flicker]");
+
+    function flicker(el) {
+      const delay = Math.random() * 4000 + 500; // 0.5s ~ 4s 랜덤
+      setTimeout(() => {
+        // intro가 완전히 꺼진 상태면 굳이 깜빡임 안 돌려도 됨
+        if (!document.body.classList.contains("intro-off")) {
+          el.classList.toggle("flicker-off");
+          flicker(el);
+        }
+      }, delay);
+    }
+
+    flickerTargets.forEach(el => flicker(el));
+
+    // 스크롤에 따라 텍스트 확대 + 일정 지점에서 OFF
+    const introSection = document.getElementById("intro");
+    const neonBox = document.querySelector(".neon-box");
+
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+      const introHeight = introSection.offsetHeight || window.innerHeight;
+
+      // 0 ~ 1 사이로 progress 값 만들기
+      const progress = Math.min(scrollY / introHeight, 1);
+
+      // scale: 처음 1 → 최대 약 3배까지 커지게
+      const scale = 1 + progress * 2; // 1 ~ 3
+      neonBox.style.transform = `scale(${scale})`;
+
+      // progress가 0.65 이상이면 → 네온 OFF + 글자 사라짐
+      if (progress > 0.65) {
+        document.body.classList.add("intro-off");
+      } else {
+        document.body.classList.remove("intro-off");
+      }
+    });
+  </script>
+
+</body>
+</html>
