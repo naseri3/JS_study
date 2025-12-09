@@ -19,11 +19,15 @@ const productsA = [
 ];
 
 // 👉 코드 작성
+let products = [];
+for(let i = 0; i < productsA.length; i++) {
+    if(productsA[i].price <= 10000 && productsA[i].stock >= 5) {
+        products.push(productsA[i]);
+    }
+}
 
 
-
-
-console.log("문제1 결과:", /* 결과 */);
+console.log("문제1 결과:", products);
 console.log("---------------------------------------");
 
 
@@ -39,10 +43,18 @@ console.log("---------------------------------------");
 const text = "Frontend development requires patience and practice";
 
 // 👉 코드 작성
+let char = text.split(" ");
+let newArr = [];
+
+for(let i = 0; i < char.length; i++) {
+    if(char[i].length >= 5) {
+        newArr.push(char[i]);
+    }
+}
 
 
 
-console.log("문제2 결과:", /* 결과 */);
+console.log("문제2 결과:", newArr);
 console.log("---------------------------------------");
 
 
@@ -58,10 +70,16 @@ console.log("---------------------------------------");
 const numbers = [10, 43, 22, 98, 61, 3, 75];
 
 // 👉 코드 작성
+// let result = Math.max(...numbers);
+let max = numbers[0];
+for (const num of numbers) {
+    if(num > max) {
+        max = num;
+    }
+}
 
 
-
-console.log("문제3 결과:", /* 결과 */);
+console.log("문제3 결과:", max);
 console.log("---------------------------------------");
 
 
@@ -80,12 +98,15 @@ const settings = {
   layout: "grid",
   language: "ko",
 };
+let data = [];
 
 // 👉 코드 작성
+for (const key in settings) {
+    data.push(`${key} : ${settings[key]}`);
+}
 
 
-
-console.log("문제4 결과:", /* 결과 */);
+console.log("문제4 결과:", data);
 console.log("---------------------------------------");
 
 
@@ -101,10 +122,16 @@ console.log("---------------------------------------");
 const tagsA = ["html", "css", "js", "css", "js", "typescript", "html"];
 
 // 👉 코드 작성
+let unique = [];
+for (const tag of tagsA) {
+   if(!unique.includes(tag)) {
+    unique.push(tag);
+   }
+}
 
 
 
-console.log("문제5 결과:", /* 결과 */);
+console.log("문제5 결과:", unique);
 console.log("---------------------------------------");
 
 
