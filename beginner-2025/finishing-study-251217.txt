@@ -1,0 +1,448 @@
+// 배열 메서드 reduce
+: reduce() 메서드는 배열의 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
+
+// reduce 인자
+1. 누산기 (acc)
+2. 현재 값 (cur)
+3. 현재 인덱스 (idx)
+4. 원본 배열 (src)
+
+
+// 콜백 함수
+numbers.reduce((누산값, 현재요소값, 현재요소의index, 현재배열) => {
+  return 다음누산값;
+}, 초기누산값);
+
+// map과 reduce의 차이점
+map 메서드는 배열의 각 요소에 대해 주어진 함수를 호출하고, 함수의 반환값으로 구성된 새 배열을 생성,
+map 메서드는 배열의 각 요소를 변환하는 데 사용
+reduce 메서드는 배열의 각 요소에 대해 리듀서 함수를 실행하고, 단일 결과값을 반환, reduce 메서드는 배열 내의 값들을 하나로 축소하는 데 사용
+
+// reduce 메서드 사용 방법
+reduce 메서드는 단순히 숫자를 합하는 것 이상으로, 다양한 방식으로 사용될 수 있습니다. 
+배열을 기반으로 복잡한 데이터 처리와 변환을 수행할 때 매우 유용한 메서드입니다. 
+아래는 reduce 메서드의 다양한 사용 방법들입니다.
+
+
+// 1) 숫자 배열의 합계
+ 
+const numbers = [1, 2, 3, 4, 5];
+const total = numbers.reduce((acc, current) => acc + current, 0);
+console.log(total); // 출력: 15
+
+- reduce 메서드를 사용하여 숫자 배열의 모든 요소를 합산하는 방법입니다. 
+  초기값을 0으로 설정하여, 각 요소를 순회하며 누적값에 더하는 식으로 총합을 구합니다.
+
+
+// 2) 객체 배열에서 특정 속성의 합계 계산
+
+const products = [
+  { name: 'Product A', price: 100 },
+  { name: 'Product B', price: 150 },
+  { name: 'Product C', price: 200 }
+];
+const totalCost = products.reduce((acc, product) => acc + product.price, 0);
+console.log(totalCost); // 출력: 450
+
+- reduce 메서드를 이용해 객체 배열 내 특정 속성(price)의 합계를 계산합니다.
+  각 객체의 price 값을 누적값에 더함으로써 전체 비용을 산출합니다.
+
+
+// 3) 배열 내 문자열의 빈도수 계산
+
+const words = ['apple', 'banana', 'apple', 'orange', 'banana', 'apple'];
+const wordCount = words.reduce((acc, word) => {
+  acc[word] = (acc[word] || 0) + 1;
+  return acc;
+}, {});
+console.log(wordCount);
+// 출력: { apple: 3, banana: 2, orange: 1 }
+
+- reduce 메서드를 이용해 문자열 배열에서 각 문자열의 등장 빈도수를 계산하는 방법입니다. 초기값을 빈 객체로 설정합니다. 
+  빈 객체에서 키에는 각 문자열을, 값에는 해당 키의 등장 횟수를 저장합니다.
+
+
+// 4) 배열의 요소를 하나의 문자열로 결합 1
+
+const numbers = [1, 2, 3, 4, 5];
+const concatenatedNumbers = numbers.reduce((acc, number) => acc + number, "");
+console.log(concatenatedNumbers); // 출력: "12345"
+ 
+- 숫자 배열의 요소를 순회하며 reduce 메서드를 통해 이들을 문자열로 연결합니다. 
+  이 과정에서 배열의 각 숫자가 문자열로 변환되어 하나의 문자열로 합쳐집니다.
+
+
+// 5) 배열의 요소를 하나의 문자열로 결합 2
+
+const numbers = [1, 2, 3, 4, 5];
+const reducedAndJoined = numbers.reduce((acc, number, index, array) => {
+  const separator = index < array.length - 1 ? ", " : "";
+  return `${acc}Number: ${number}${separator}`;
+}, "");
+console.log(reducedAndJoined); // 출력: "Number: 1, Number: 2, Number: 3, Number: 4, Number: 5"
+
+- reduce 메서드를 사용하여 배열의 각 요소를 변환하고, 이를 특정 패턴의 문자열로 결합하는 방법을 보여줍니다. 
+  배열의 마지막 요소를 제외하고, 각 요소 뒤에 쉼표와 공백을 추가하여 문자열을 구성합니다.
+  reduce 메서드는 map과 join을 조합해야 가능한 작업을 단독으로 수행할 수 있습니다.
+
+ 
+
+// --------------------------------------------------
+// 문제 1 (⭐⭐⭐) — reduce (총합 계산)
+// 조건:
+// - status === "완료"
+// - price * count 총합
+// --------------------------------------------------
+
+const orders = [
+  { product: "키위", price: 3000, count: 3, status: "완료" },
+  { product: "딸기", price: 12000, count: 1, status: "진행중" },
+  { product: "수박", price: 18000, count: 3, status: "완료" },
+  { product: "귤", price: 5000, count: 2, status: "완료" },
+];
+
+// 👉 코드 작성
+let total = orders
+    .filter(fruit => fruit.status === "완료")
+    .reduce((acc, cur) => acc + cur.price * cur.count, 0);
+console.log(total);
+// 출력값: 73000
+
+
+// --------------------------------------------------
+// 문제 2 (⭐⭐⭐⭐) — reduce (group by 집계)
+// 조건:
+// - type === "success" 만
+// - service별 성공 횟수 객체로 반환
+// --------------------------------------------------
+
+const logs = [
+  { type: "success", service: "auth" },
+  { type: "start" },
+  { type: "success", service: "auth" },
+  { type: "fail", service: "payment" },
+  { type: "success", service: "payment" },
+  { type: "success", service: "auth" },
+  { type: "success", service: "payment" },
+];
+
+// 👉 코드 작성
+let result1 = logs
+  .filter(log => log.type === "success")
+  .reduce((acc, cur) => {
+    acc[cur.service] = (acc[cur.service] || 0) + 1;
+    // acc[cur.service] => 결과 객체에서 해당 서비스의 현재 카운트 값
+    // (acc[cur.service] || 0) + 1 => 성공 로그를 하나 발견했으니 카운트 1 증가
+    return acc;
+  }, {});
+
+console.log(result1);
+// 출력값: { auth: 3, payment: 2 }
+
+
+// --------------------------------------------------
+// 문제 3 (⭐⭐⭐⭐⭐) — 상태 머신 사고
+// 조건:
+// - login 이후
+// - logout 이전
+// 발생한 purchase만 유효
+// --------------------------------------------------
+
+const logs2 = [
+  { type: "purchase", price: 5000 },
+  { type: "login" },
+  { type: "purchase", price: 12000 },
+  { type: "purchase", price: 8000 },
+  { type: "logout" },
+  { type: "purchase", price: 20000 },
+  { type: "login" },
+  { type: "purchase", price: 3000 },
+  { type: "logout" },
+];
+
+// 👉 코드 작성
+let isLoggedIn = false;
+let total1 = {};
+
+for(let i = 0; i < logs2.length; i++) {
+    if(logs2[i].type === "login") {
+        isLoggedIn = true;
+        continue;
+    }
+    if(logs2[i].type === "logout") {
+        isLoggedIn = false;
+        continue;
+    }
+    if(logs2[i].type === "purchase" && isLoggedIn) {
+         total1 += logs2[i].price;
+    }
+}
+
+console.log(total1);
+// 출력값: 23000
+
+
+// --------------------------------------------------
+// 문제 4 (⭐⭐⭐⭐⭐⭐) — 체이닝 종합
+// 조건:
+// 1) role === "frontend"
+// 2) score 내림차순 정렬
+// 3) 상위 2명의 name만 배열로 반환
+// --------------------------------------------------
+
+const candidates = [
+  { name: "민지", role: "frontend", score: 82 },
+  { name: "현수", role: "backend", score: 91 },
+  { name: "서준", role: "frontend", score: 95 },
+  { name: "지우", role: "frontend", score: 88 },
+  { name: "도윤", role: "backend", score: 77 },
+];
+
+// 👉 코드 작성
+let result3 = candidates
+  .filter(item => item.role === "frontend")
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 2)
+  .map(item => item.name);
+
+console.log(result3);
+// 출력값: ["서준", "지우"]
+
+
+// --------------------------------------------------
+// 문제 5 (⭐⭐⭐) — reduce (group by 카운트)
+// 조건:
+// - type === "success" 만
+// - service별 성공 횟수 객체로 반환
+// --------------------------------------------------
+
+const logsA = [
+  { type: "success", service: "auth" },
+  { type: "success", service: "auth" },
+  { type: "fail", service: "payment" },
+  { type: "success", service: "payment" },
+  { type: "success", service: "search" },
+  { type: "success", service: "payment" },
+  { type: "start" },
+];
+
+// 👉 코드 작성
+let resultB = logsA
+    .filter(item => item.type === "success")
+    .reduce((acc, cur) => {
+        acc[cur.service] = (acc[cur.service] || 0) +1;
+        return acc;
+    }, {});
+
+console.log(resultB);
+// 출력값: { auth: 2, payment: 2, search: 1 }
+
+
+// --------------------------------------------------
+// 문제 6 (⭐⭐⭐⭐⭐) — 체이닝 종합 (filter → sort → slice → map)
+// 조건:
+// 1) role === "frontend"
+// 2) score 내림차순 정렬
+// 3) 상위 3명의 name만 배열로 반환
+// --------------------------------------------------
+
+const candidatesA = [
+  { name: "민지", role: "frontend", score: 82 },
+  { name: "현수", role: "backend", score: 91 },
+  { name: "서준", role: "frontend", score: 95 },
+  { name: "지우", role: "frontend", score: 88 },
+  { name: "도윤", role: "backend", score: 77 },
+  { name: "하린", role: "frontend", score: 90 },
+];
+
+// 👉 코드 작성
+let resultC = candidatesA
+    .filter(item => item.role === "frontend")
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3)
+    .map(item => item.name);
+
+console.log(resultC);
+// 출력값: ["서준", "하린", "지우"]
+
+
+
+// --------------------------------------------------
+// 문제 7 (⭐⭐⭐) — reduce (숫자 누적)
+// 조건:
+// - amount 합계 출력
+// --------------------------------------------------
+
+const payments = [
+  { amount: 12000 },
+  { amount: 8000 },
+  { amount: 15000 },
+  { amount: 5000 },
+];
+
+// 👉 코드 작성
+let total2 = payments.reduce((acc, cur) => {
+    return acc = acc + cur.amount; 
+}, 0);
+
+console.log(total2);
+// 출력값: 40000
+
+
+// --------------------------------------------------
+// 문제 8 (⭐⭐⭐) — reduce (조건부 합계)
+// 조건:
+// - type === "income" 만
+// - amount 합계
+// --------------------------------------------------
+
+const records = [
+  { type: "income", amount: 30000 },
+  { type: "expense", amount: 12000 },
+  { type: "income", amount: 18000 },
+  { type: "expense", amount: 7000 },
+];
+
+// 👉 코드 작성
+let total3 = records
+    .filter(item => item.type === "income")
+    .reduce((acc,cur) => acc + cur.amount, 0);
+
+console.log(total3);
+// 출력값: 48000
+
+
+
+// --------------------------------------------------
+// 문제 9 (⭐⭐⭐) — reduce (최댓값)
+// 조건:
+// - 가장 큰 amount 값 출력
+// --------------------------------------------------
+
+const payments2 = [
+  { amount: 12000 },
+  { amount: 8000 },
+  { amount: 15000 },
+  { amount: 5000 },
+];
+
+// 👉 코드 작성
+let maxAmount = payments2
+    .reduce((acc, cur) => {
+        return acc > cur.amount ? acc : cur.amount;
+        // acc값이 cur값보다 크면 acc값 출력하고 아니면 cur.amount값을 출력하시오
+    }, 0);
+
+console.log(maxAmount);
+// 출력값: 15000
+
+
+
+// --------------------------------------------------
+// 문제 10 (⭐⭐⭐) — reduce (개수 세기)
+// 조건:
+// - isActive === true 인 항목 개수 출력
+// --------------------------------------------------
+
+const users = [
+  { name: "민수", isActive: true },
+  { name: "지은", isActive: false },
+  { name: "서연", isActive: true },
+  { name: "도윤", isActive: true },
+];
+
+// 👉 코드 작성
+let activeCount = users
+    .filter(item => item.isActive === true)
+    .reduce((acc, cur) => acc + (cur.isActive ? 1 : 0),0);
+    // active인 사람을 만나면 1씩 더해서 총 몇 명인지 세어라
+
+console.log(activeCount);
+// 출력값: 3
+
+
+// --------------------------------------------------
+// 문제 11 (⭐⭐⭐) — map + 조건 처리
+// 조건:
+// - score가 60 미만이면 "F"
+// - 60 이상이면 score 그대로 유지
+// --------------------------------------------------
+
+const scores = [78, 55, 92, 40, 61];
+
+// 👉 코드 작성
+let result2 = scores.map(item => item <= 60 ? "F" : item);
+
+console.log(result2);
+// 출력값: [78, "F", 92, "F", 61]
+
+
+
+// --------------------------------------------------
+// 문제 12 (⭐⭐⭐⭐) — reduce (객체 변환)
+// 조건:
+// - id를 key로
+// - name을 value로 하는 객체 생성
+// --------------------------------------------------
+
+const members = [
+  { id: 101, name: "민지" },
+  { id: 102, name: "현수" },
+  { id: 103, name: "서준" },
+];
+
+// 👉 코드 작성
+let result3 = members.reduce((acc, cur) => {
+  acc[cur.id] = cur.name;
+  return acc;
+}, {});
+console.log(result3);
+// 출력값: { 101: "민지", 102: "현수", 103: "서준" }
+
+
+
+// --------------------------------------------------
+// 문제 13 (⭐⭐⭐) — reduce (조건부 개수)
+// 조건:
+// - score가 70 이상인 학생 수 출력
+// --------------------------------------------------
+
+const students2 = [
+  { name: "민수", score: 65 },
+  { name: "지은", score: 72 },
+  { name: "서연", score: 88 },
+  { name: "도윤", score: 70 },
+  { name: "하린", score: 61 },
+];
+
+// 👉 코드 작성
+let passCount = students2.reduce((acc, cur) => acc + (cur.score >= 70 ? 1 : 0), 0);
+console.log(passCount);
+// 출력값: 3
+
+
+// --------------------------------------------------
+// 문제 14 (⭐⭐⭐⭐) — reduce (group by)
+// 조건:
+// - category별 상품 개수 집계
+// --------------------------------------------------
+
+const productsC = [
+  { name: "햄버거", category: "food" },
+  { name: "피자", category: "food" },
+  { name: "노트북", category: "device" },
+  { name: "마우스", category: "device" },
+  { name: "샐러드", category: "food" },
+];
+
+// 👉 코드 작성
+let result4 = productsC
+    .reduce((acc, cur) => {
+        acc[cur.category] = (acc[cur.category] || 0) + 1;
+        // acc[cur.category] => 결과 객체에서 해당 서비스의 현재 카운트 값
+        // (acc[cur.category] || 0) + 1 => 성공 로그를 하나 발견했으니 카운트 1 증가
+        return acc;
+    }, {});
+
+console.log(result4);
+// 출력값: { food: 3, device: 2 }

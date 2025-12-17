@@ -278,7 +278,7 @@ let result4 = productsC
     .reduce((acc, cur) => {
         acc[cur.category] = (acc[cur.category] || 0) + 1;
         // acc[cur.category] => 결과 객체에서 해당 서비스의 현재 카운트 값
-    // (acc[cur.category] || 0) + 1 => 성공 로그를 하나 발견했으니 카운트 1 증가
+        // (acc[cur.category] || 0) + 1 => 성공 로그를 하나 발견했으니 카운트 1 증가
         return acc;
     }, {});
 
