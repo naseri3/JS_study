@@ -495,3 +495,85 @@ console.log(resultAmount);
 //   cash: 12000,
 //   point: 3000
 // }
+
+
+// --------------------------------------------------
+// 문제 16 — 상태 머신 사고 ⭐⭐⭐⭐⭐
+// --------------------------------------------------
+// 로그인 상태에서만 장바구니 금액 누적 + 결제 시 초기화
+
+const events = [
+  { type: "add", price: 5000 },
+  { type: "login" },
+  { type: "add", price: 12000 },
+  { type: "add", price: 8000 },
+  { type: "pay" },
+  { type: "add", price: 7000 },
+  { type: "add", price: 3000 },
+  { type: "logout" },
+  { type: "pay" },
+  { type: "login" },
+  { type: "add", price: 15000 },
+  { type: "pay" },
+];
+
+// 규칙
+// - login 이후 ~ logout 이전 add만 유효
+// - pay 발생 시: 누적 금액 결제 + 누적값 0으로 초기화
+// - 최종 출력: 모든 결제 금액의 합
+
+let isLoggedIn = false;
+let cartTotal = 0;   // 현재 장바구니 누적
+let resultTotal = 0; // 모든 결제 금액 합
+
+for (let i = 0; i < events.length; i++) {
+  const event = events[i];
+
+  if (event.type === "login") {
+    isLoggedIn = true;
+    continue;
+  }
+
+  if (event.type === "logout") {
+    isLoggedIn = false;
+    continue;
+  }
+
+  if (event.type === "add" && isLoggedIn) {
+    cartTotal += event.price;
+    continue;
+  }
+
+  if (event.type === "pay") {
+    resultTotal += cartTotal;
+    cartTotal = 0;
+  }
+}
+
+console.log(resultTotal);
+// 👉 출력값: 35000
+
+
+// --------------------------------------------------
+// 문제 17 — filter → map 체이닝 ⭐⭐⭐⭐
+// --------------------------------------------------
+// 조건에 맞는 상품 문자열 배열 만들기
+
+const cart = [
+  { name: "키위", price: 3000, count: 3, category: "fruit" },
+  { name: "딸기", price: 12000, count: 1, category: "fruit" },
+  { name: "고구마", price: 4000, count: 5, category: "vegi" },
+  { name: "귤", price: 5000, count: 2, category: "fruit" },
+];
+
+// 요구사항
+// - category === "fruit"
+// - total(price * count) >= 10000
+// - 결과 형식: "상품명(총액)"
+
+let resultCart = cart
+    .filter(item => item.category === "fruit" && item.price * item.count >= 10000)
+    .map(item => `${item.name}(${item.price * item.count})`);
+
+console.log(resultCart);
+// 👉 출력값: ["딸기(12000)", "귤(10000)"]
