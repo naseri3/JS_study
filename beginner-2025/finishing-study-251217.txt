@@ -464,3 +464,34 @@ let result4 = productsC
 
 console.log(result4);
 // 출력값: { food: 3, device: 2 }
+
+
+
+// --------------------------------------------------
+// 문제15 (⭐⭐⭐⭐) — 타입별 금액 합계 구하기
+// payments 배열에서
+// type별 amount의 총합을 객체로 출력하세요.
+// --------------------------------------------------
+
+const payments = [
+  { type: "card", amount: 12000 },
+  { type: "cash", amount: 5000 },
+  { type: "card", amount: 8000 },
+  { type: "point", amount: 3000 },
+  { type: "cash", amount: 7000 },
+  { type: "card", amount: 4000 },
+];
+
+let resultAmount = payments
+    .reduce((acc, cur) => {
+       acc[cur.type] = (acc[cur.type] || 0) + cur.amount;
+       return acc;
+    }, {});
+
+console.log(resultAmount);
+// 👉 출력값:
+// {
+//   card: 24000,
+//   cash: 12000,
+//   point: 3000
+// }
