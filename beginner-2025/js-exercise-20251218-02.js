@@ -1,6 +1,9 @@
 /*
     reduce 코드 정리
 
+    // acc[기준값] = (acc[기준값] || 0) + 더할값
+    // Object.entries(obj).reduce((a, b) => a[1] > b[1] ? a : b)[0]
+
     // 총합 계산
     .reduce((acc, cur) => acc + cur.price * cur.count, 0)
 

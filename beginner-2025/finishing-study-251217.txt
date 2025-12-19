@@ -577,3 +577,36 @@ let resultCart = cart
 
 console.log(resultCart);
 // 👉 출력값: ["딸기(12000)", "귤(10000)"]
+
+
+
+// --------------------------------------------------
+// 문제 18 — 최고 소비 카테고리 (⭐⭐⭐⭐⭐)
+// --------------------------------------------------
+// 카테고리별 합계를 구한 뒤
+// 가장 많이 소비한 카테고리 이름만 출력하세요.
+
+const expenses = [
+  { category: "food", amount: 15000 },
+  { category: "travel", amount: 70000 },
+  { category: "food", amount: 10000 },
+  { category: "shopping", amount: 30000 },
+  { category: "travel", amount: 20000 }
+];
+
+// 1️⃣ 카테고리별 합계 구하기
+const sumByCategory = expenses.reduce((acc, cur) => {
+  acc[cur.category] = (acc[cur.category] || 0) + cur.amount;
+  return acc;
+}, {});
+
+// 2️⃣ 가장 많이 소비한 카테고리 찾기
+const maxCategory = Object.entries(sumByCategory).reduce(
+  (max, cur) => (cur[1] > max[1] ? cur : max)
+)[0];
+// Object.entries(obj) => 객체를 배열로 바꿔줌
+// [0] → key (카테고리 이름) / [1] → value (금액)
+console.log(maxCategory);
+
+// 출력값
+// "travel"
