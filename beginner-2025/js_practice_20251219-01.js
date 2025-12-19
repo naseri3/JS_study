@@ -790,3 +790,155 @@ let maxChoice = Object.entries(choice).reduce(
 console.log(maxChoice);
 
 // 출력값: "shopping"
+
+// ==================================================
+// 📘 JS 연습 문제 세트 5
+// 조건: 아래 문제들은
+// 👉 네가 정리한 reduce 공식만 사용해서 풀 것
+// (filter / map / Object.entries / reduce OK)
+// ==================================================
+
+
+// --------------------------------------------------
+// 문제 1 (⭐⭐⭐⭐) — 총합 계산
+// 조건:
+// - status === "paid"
+// - price * count 총합 출력
+// (총합 계산 reduce 공식 사용)
+// --------------------------------------------------
+
+const orders3 = [
+  { item: "사과", price: 3000, count: 5, status: "paid" },
+  { item: "딸기", price: 12000, count: 1, status: "pending" },
+  { item: "수박", price: 18000, count: 2, status: "paid" },
+  { item: "귤", price: 5000, count: 2, status: "paid" },
+];
+
+// 👉 코드 작성
+let result3 = orders3
+    .filter(item => item.status === "paid")
+    .reduce((acc, cur) => acc + cur.price * cur.count, 0);
+
+console.log(result3);
+// 출력값: 61000
+
+
+
+// --------------------------------------------------
+// 문제 2 (⭐⭐⭐⭐) — group by 집계 (개수)
+// 조건:
+// - type === "success" 만
+// - service별 성공 횟수 객체로 출력
+// (group by 집계 공식 사용)
+// --------------------------------------------------
+
+const logs5 = [
+  { type: "success", service: "auth" },
+  { type: "fail", service: "payment" },
+  { type: "success", service: "auth" },
+  { type: "success", service: "payment" },
+  { type: "success", service: "search" },
+  { type: "success", service: "auth" },
+];
+
+// 👉 코드 작성
+let resultD = logs5
+    .filter(item => item.type === "success")
+    .reduce((acc, cur) => {
+        acc[cur.service] = (acc[cur.service] || 0) + 1;
+        return acc;
+    }, {});
+
+console.log(resultD);
+
+// 출력값:
+// {
+//   auth: 3,
+//   payment: 1,
+//   search: 1
+// }
+
+
+
+// --------------------------------------------------
+// 문제 3 (⭐⭐⭐⭐) — group by 합계
+// 조건:
+// - category별 amount 총합 객체로 출력
+// (group by 합계 공식 사용)
+// --------------------------------------------------
+
+const expenses4 = [
+  { category: "food", amount: 12000 },
+  { category: "travel", amount: 50000 },
+  { category: "food", amount: 8000 },
+  { category: "shopping", amount: 30000 },
+  { category: "travel", amount: 10000 },
+];
+
+// 👉 코드 작성
+let result4 = expenses4.reduce((acc, cur) => {
+    acc[cur.category] = (acc[cur.category] || 0) + cur.amount;
+    return acc;
+}, {});
+
+console.log(result4);
+// 출력값:
+// {
+//   food: 20000,
+//   travel: 60000,
+//   shopping: 30000
+// }
+
+
+
+// --------------------------------------------------
+// 문제 4 (⭐⭐⭐⭐⭐) — 최대값
+// 조건:
+// - 가장 큰 amount 값 출력
+// (최대값 reduce 공식 사용)
+// --------------------------------------------------
+
+const payments3 = [
+  { amount: 12000 },
+  { amount: 8000 },
+  { amount: 15000 },
+  { amount: 5000 },
+];
+
+// 👉 코드 작성
+let result5 = payments3.reduce((acc, cur) => {
+    return acc > cur.amount ? acc : cur.amount;
+}, 0);
+console.log(result5);
+// 출력값: 15000
+
+
+
+// --------------------------------------------------
+// 문제 5 (⭐⭐⭐⭐⭐) — group by + 최대값
+// 조건:
+// 1) type별 amount 합계 객체 생성
+// 2) 가장 큰 합계를 가진 type 이름 출력
+// (group by 합계 + Object.entries 최대값 공식 사용)
+// --------------------------------------------------
+
+const payments5 = [
+  { type: "card", amount: 12000 },
+  { type: "cash", amount: 7000 },
+  { type: "card", amount: 18000 },
+  { type: "point", amount: 5000 },
+  { type: "cash", amount: 9000 },
+];
+
+// 👉 코드 작성
+let itemChoice = payments5.reduce((acc, cur) => {
+    acc[cur.type] = (acc[cur.type] || 0) + cur.amount;
+    return acc;
+}, {});
+
+let resultItem1 = Object.entries(itemChoice).reduce((max, cur) => 
+    max[1] > cur[1] ? max : cur
+)[0];
+
+console.log(resultItem1);
+// 출력값: "card"
